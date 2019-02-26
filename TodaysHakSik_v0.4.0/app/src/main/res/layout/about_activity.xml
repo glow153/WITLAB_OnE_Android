@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/aboutTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="45sp"
+        android:gravity="center"
+        android:text="@string/app_name"/>
+
+    <ImageView
+        android:id="@+id/ivknu"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/aboutTitle"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/knu" />
+
+    <ImageView
+        android:id="@+id/ivWitlab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ivknu"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/ic_witlab_logo" />
+
+    <LinearLayout
+        android:id="@+id/layoutVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivknu"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/ivknu"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/cap_ver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_caption_ver"
+            android:textSize="@dimen/txtsize_title"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/ver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_version"
+            android:textSize="@dimen/txtsize_list"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivWitlab"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/ivWitlab"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/cap_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_caption_author"
+            android:textSize="@dimen/txtsize_title"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_author"
+            android:textSize="@dimen/txtsize_list"/>
+        <TextView
+            android:id="@+id/contact1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_contact1"
+            android:textSize="@dimen/txtsize_list"/>
+        <TextView
+            android:id="@+id/contact2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_contact2"
+            android:textSize="@dimen/txtsize_list"/>
+        <TextView
+            android:id="@+id/contact3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_contact3"
+            android:textSize="@dimen/txtsize_list"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

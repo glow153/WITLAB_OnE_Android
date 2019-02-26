@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">누이끄</string>
+    <string name="title_home">우리집</string>
+    <string name="title_chart">소음 현황</string>
+    <string name="title_settings">설정</string>
+
+    <string name="home_caption_noiselevel">현재 층간소음 크기</string>
+    <string name="home_caption_dB">dB</string>
+
+    <string name="settings_allow_push">푸쉬 알림을 받겠습니다.</string>
+    <string name="settings_always_refresh">우리집 층간소음을 실시간 갱신합니다.</string>
+    <string name="settings_time_interval">시간 간격 : </string>
+    <string name="settings_second">(단위 : 초)</string>
+
+    <string name="chart_caution">주의! 다른 세대에서 층간소음이 발생했어요</string>
+    <string name="chart_warning">경고! 당신이 층간소음을 일으키고 있어요!</string>
+</resources>

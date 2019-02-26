@@ -1,0 +1,415 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:paddingEnd="3dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <!--User Title-->
+            <LinearLayout
+                android:id="@+id/user_title"
+                android:layout_alignParentStart="true"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/user"
+                    android:layout_width="@dimen/fa_user_img"
+                    android:layout_height="@dimen/fa_user_img" />
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="20dp"
+                    android:textSize="@dimen/fa_user_name"
+                    android:textStyle="bold"
+                    android:text="Jake Park"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <!--User Status-->
+            <LinearLayout
+                android:id="@+id/user_status_layout"
+                android:layout_below="@id/user_title"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#4682B4" />
+
+                <!--User Information-->
+                <LinearLayout
+                    android:id="@+id/user_info"
+                    android:layout_marginTop="@dimen/fa_section_margin"
+                    android:layout_marginBottom="@dimen/fa_section_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textSize="@dimen/fa_caption"
+                        android:text="User Info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <!--TODO-->
+
+                </LinearLayout>
+
+                <!--Skin Type -->
+                <LinearLayout
+                    android:id="@+id/skintype"
+                    android:layout_marginTop="@dimen/fa_section_margin"
+                    android:layout_marginBottom="@dimen/fa_section_margin"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:textSize="@dimen/fa_caption"
+                        android:text="Skin Type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btn_skintype1"
+                            android:layout_margin="@dimen/fa_skintype_btn_margin"
+                            android:background="@drawable/skintype1"
+                            android:layout_width="@dimen/fa_skintype_btn_size_w"
+                            android:layout_height="@dimen/fa_skintype_btn_size_h"/>
+                        <Button
+                            android:id="@+id/btn_skintype2"
+                            android:layout_margin="@dimen/fa_skintype_btn_margin"
+                            android:background="@drawable/skintype2"
+                            android:layout_width="@dimen/fa_skintype_btn_size_w"
+                            android:layout_height="@dimen/fa_skintype_btn_size_h"/>
+                        <Button
+                            android:id="@+id/btn_skintype3"
+                            android:layout_margin="@dimen/fa_skintype_btn_margin"
+                            android:background="@drawable/skintype3c"
+                            android:layout_width="@dimen/fa_skintype_btn_size_w"
+                            android:layout_height="@dimen/fa_skintype_btn_size_h"/>
+                        <Button
+                            android:id="@+id/btn_skintype4"
+                            android:layout_margin="@dimen/fa_skintype_btn_margin"
+                            android:background="@drawable/skintype4"
+                            android:layout_width="@dimen/fa_skintype_btn_size_w"
+                            android:layout_height="@dimen/fa_skintype_btn_size_h"/>
+                        <Button
+                            android:id="@+id/btn_skintype5"
+                            android:layout_margin="@dimen/fa_skintype_btn_margin"
+                            android:background="@drawable/skintype5"
+                            android:layout_width="@dimen/fa_skintype_btn_size_w"
+                            android:layout_height="@dimen/fa_skintype_btn_size_h"/>
+                        <Button
+                            android:id="@+id/btn_skintype6"
+                            android:layout_margin="@dimen/fa_skintype_btn_margin"
+                            android:background="@drawable/skintype6"
+                            android:layout_width="@dimen/fa_skintype_btn_size_w"
+                            android:layout_height="@dimen/fa_skintype_btn_size_h"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--Changable Status-->
+            <LinearLayout
+                android:id="@+id/changable_status_layout"
+                android:layout_below="@+id/user_status_layout"
+                android:layout_alignParentStart="true"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#4682B4" />
+
+                <!--Daily Resolution-->
+                <LinearLayout
+                    android:id="@+id/daily_resolution_layout"
+                    android:layout_marginTop="@dimen/fa_section_margin"
+                    android:layout_marginBottom="@dimen/fa_section_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/daily_resolution_caption_1"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="@dimen/fa_caption"
+                        android:text="@string/fa_daily_Resolution_caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="2"/>
+
+                    <LinearLayout
+                        android:id="@+id/daily_resolution_input"
+                        android:orientation="horizontal"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:weightSum="1">
+
+                        <EditText
+                            android:id="@+id/edt_daily_resolution_amount"
+                            android:textSize="@dimen/fa_daily_edt_txtsize"
+                            android:textStyle="bold"
+                            android:textAlignment="center"
+                            android:text="400"
+                            android:layout_weight="0.7"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"/>
+
+                        <TextView
+                            android:layout_gravity="center_vertical"
+                            android:textSize="@dimen/fa_daily_edt_txtsize"
+                            android:textStyle="bold"
+                            android:text="IU"
+                            android:layout_weight="0.3"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Exposuer Area -->
+                <LinearLayout
+                    android:id="@+id/exposure_layout"
+                    android:layout_marginTop="@dimen/fa_section_margin"
+                    android:layout_marginBottom="@dimen/fa_section_margin"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp">
+                        <TextView
+                            android:layout_gravity="center_vertical"
+                            android:textSize="@dimen/fa_caption"
+                            android:text="Exposure Area"
+                            android:layout_weight="0.6"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/tv_exposure_area"
+                            android:textSize="@dimen/fa_caption"
+                            android:textColor="#000000"
+                            android:textStyle="bold"
+                            android:layout_marginStart="20dp"
+                            android:layout_weight="0.2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:text="10" />
+                        <TextView
+                            android:text="%"
+                            android:textSize="@dimen/fa_caption"
+                            android:textStyle="bold"
+                            android:layout_weight="0.2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ex_upper"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:id="@+id/ex_upper_btns"
+                            android:gravity="center"
+                            android:layout_weight="0.8"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/profile_exposure_10_upper"
+                                android:layout_alignParentStart="true"
+                                android:layout_width="@dimen/fa_exposure_icon"
+                                android:layout_height="@dimen/fa_exposure_icon"
+                                android:background="@drawable/ex_up_10" />
+
+                            <Button
+                                android:id="@+id/profile_exposure_50_upper"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="@dimen/fa_exposure_icon"
+                                android:layout_height="@dimen/fa_exposure_icon"
+                                android:background="@drawable/ex_up_50" />
+
+                            <Button
+                                android:id="@+id/profile_exposure_90_upper"
+                                android:layout_alignParentEnd="true"
+                                android:layout_width="@dimen/fa_exposure_icon"
+                                android:layout_height="@dimen/fa_exposure_icon"
+                                android:background="@drawable/ex_up_90" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_weight="0.2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/sb_exposure_up_wrapper"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <SeekBar
+                            android:id="@+id/sb_exposure_up"
+                            android:max="50"
+                            android:progress="5"
+                            android:layout_weight="0.8"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent" />
+
+
+                        <EditText
+                            android:id="@+id/edt_exposure_up"
+                            android:layout_weight="0.15"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="5"
+                            android:textAlignment="center"
+                            android:inputType="numberDecimal"/>
+
+                        <TextView
+                            android:text="%"
+                            android:layout_weight="0.05"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/sb_exposure_lo_wrapper"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <SeekBar
+                            android:id="@+id/sb_exposure_lo"
+                            android:max="50"
+                            android:progress="5"
+                            android:layout_weight="0.8"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent" />
+
+
+                        <EditText
+                            android:id="@+id/edt_exposure_lo"
+                            android:layout_weight="0.15"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:text="5"
+                            android:inputType="numberDecimal"/>
+
+                        <TextView
+                            android:text="%"
+                            android:layout_weight="0.05"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ex_lower"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:id="@+id/ex_lower_btns"
+                            android:gravity="center"
+                            android:layout_weight="0.8"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/profile_exposure_10_lower"
+                                android:layout_alignParentStart="true"
+                                android:layout_width="@dimen/fa_exposure_icon"
+                                android:layout_height="@dimen/fa_exposure_icon"
+                                android:background="@drawable/ex_lo_10" />
+
+                            <Button
+                                android:id="@+id/profile_exposure_50_lower"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="@dimen/fa_exposure_icon"
+                                android:layout_height="@dimen/fa_exposure_icon"
+                                android:background="@drawable/ex_lo_50" />
+
+                            <Button
+                                android:id="@+id/profile_exposure_90_lower"
+                                android:layout_alignParentEnd="true"
+                                android:layout_width="@dimen/fa_exposure_icon"
+                                android:layout_height="@dimen/fa_exposure_icon"
+                                android:background="@drawable/ex_lo_90" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_weight="0.2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#4682B4" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
+

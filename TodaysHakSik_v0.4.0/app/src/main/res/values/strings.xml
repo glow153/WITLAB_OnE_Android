@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">오늘의 학식</string>
+    <string name="cafeteria_student">학생식당</string>
+    <string name="cafeteria_employee">직원식당</string>
+    <string name="cafeteria_dorm">기숙사식당</string>
+    <string name="preparing">준비중입니다.</string>
+
+    <string name="menutitle_about">정보</string>
+
+    <string name="about_caption_ver">버전</string>
+    <string name="about_version">v0.4.0</string>
+    <string name="about_caption_author">만든이</string>
+    <string name="about_author">박대환</string>
+    <string name="about_contact1">glow153@gmail.com</string>
+    <string name="about_contact2">fb.com/park.jake.10</string>
+    <string name="about_contact3">glow153.tistory.com</string>
+
+</resources>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="35dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/bkgrd_settings"
+        android:layout_gravity="center_horizontal|bottom"/>
+
+    <LinearLayout
+        android:layout_gravity="center_horizontal|top"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <!-- allow push notification -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/chbxAllowPush"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"/>
+
+            <TextView
+                android:id="@+id/tvAllowPush"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/settings_allow_push"
+                android:textSize="@dimen/settings_size_cap_txt"/>
+
+        </LinearLayout>
+
+
+        <!-- always refresh -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/chbxAlwaysRefresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"/>
+
+            <TextView
+                android:id="@+id/tvAlwaysRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/settings_always_refresh"
+                android:textSize="@dimen/settings_size_cap_txt"/>
+
+        </LinearLayout>
+
+        <!-- set time interval to refresh spl on page 'home' -->
+        <LinearLayout
+            android:id="@+id/refresh_submenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:visibility="visible" >
+
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/settings_time_interval"/>
+
+            <EditText
+                android:id="@+id/edtRefreshInterval"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/settings_second"
+                android:inputType="number" />
+
+            <Button
+                android:id="@+id/intv_increment"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/plus"/>
+
+            <Button
+                android:id="@+id/intv_decrement"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/minus"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,189 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
+    tools:context=".fragment.FragmentLED">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/img_control_feelux" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="320dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#708090" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingRight="30dp"
+        android:paddingLeft="30dp"
+        android:paddingBottom="10dp">
+
+        <!-- CH 01 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:paddingEnd="10dp"
+                android:gravity="center|start"
+                android:text="CH 01" />
+
+            <SeekBar
+                android:id="@+id/control_bar_ch01"
+                android:layout_toEndOf="@+id/tv1"
+                android:layout_toStartOf="@+id/control_tv_ch01"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="70"
+                android:progress="0"
+                android:progressDrawable="@drawable/control_slider_red_bar"
+                android:thumb="@drawable/control_slider_thumb" />
+
+            <TextView
+                android:id="@+id/control_tv_ch01"
+                android:layout_alignParentEnd="true"
+                android:layout_width="35dp"
+                android:layout_height="match_parent"
+                android:gravity="center|end"
+                android:text="0" />
+
+        </RelativeLayout>
+
+        <!-- CH 02 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:paddingEnd="10dp"
+                android:gravity="center|start"
+                android:text="CH 02" />
+
+            <SeekBar
+                android:id="@+id/control_bar_ch02"
+                android:layout_toEndOf="@+id/tv2"
+                android:layout_toStartOf="@+id/control_tv_ch02"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="70"
+                android:progress="0"
+                android:progressDrawable="@drawable/control_slider_red_bar"
+                android:thumb="@drawable/control_slider_thumb" />
+
+            <TextView
+                android:id="@+id/control_tv_ch02"
+                android:layout_alignParentEnd="true"
+                android:layout_width="35dp"
+                android:layout_height="match_parent"
+                android:gravity="center|end"
+                android:text="0" />
+
+        </RelativeLayout>
+
+        <!-- CH 03 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:paddingEnd="10dp"
+                android:gravity="center|start"
+                android:text="CH 03" />
+
+            <SeekBar
+                android:id="@+id/control_bar_ch03"
+                android:layout_toEndOf="@+id/tv3"
+                android:layout_toStartOf="@+id/control_tv_ch03"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="70"
+                android:progress="0"
+                android:progressDrawable="@drawable/control_slider_red_bar"
+                android:thumb="@drawable/control_slider_thumb" />
+
+            <TextView
+                android:id="@+id/control_tv_ch03"
+                android:layout_alignParentEnd="true"
+                android:layout_width="35dp"
+                android:layout_height="match_parent"
+                android:gravity="center|end"
+                android:text="0" />
+
+        </RelativeLayout>
+
+        <!-- CH 04 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:paddingEnd="10dp"
+                android:gravity="center|start"
+                android:text="Assume UV" />
+
+            <SeekBar
+                android:id="@+id/control_bar_ch04"
+                android:layout_toEndOf="@+id/tv4"
+                android:layout_toStartOf="@+id/control_tv_ch04"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:max="1"
+                android:progress="0"
+                android:progressDrawable="@drawable/control_slider_red_bar"
+                android:thumb="@drawable/control_slider_thumb" />
+
+            <TextView
+                android:id="@+id/control_tv_ch04"
+                android:layout_alignParentEnd="true"
+                android:layout_width="35dp"
+                android:layout_height="match_parent"
+                android:gravity="center|end"
+                android:text="OFF" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

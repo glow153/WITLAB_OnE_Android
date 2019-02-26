@@ -1,0 +1,1 @@
+![AsyncTask 개념도](https://t1.daumcdn.net/cfile/tistory/2420B240577D4A720F)

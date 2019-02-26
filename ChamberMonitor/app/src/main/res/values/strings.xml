@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ChamberMonitor</string>
+    <string name="tv_temp_caption">Temperature : </string>
+    <string name="tv_humi_caption">Humidity : </string>
+    <string name="btn_background_on">알림 켜기</string>
+    <string name="btn_background_off">알림 끄기</string>
+    <string name="tv_background_status_on">알림 켜짐</string>
+    <string name="tv_background_status_off">알림 꺼짐</string>
+</resources>
