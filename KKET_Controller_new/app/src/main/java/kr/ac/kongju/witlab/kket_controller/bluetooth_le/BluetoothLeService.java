@@ -48,6 +48,7 @@ public class BluetoothLeService extends Service {
 //    private LinkedList<BleDeviceConnection> deviceConnPool;
     ArrayList<BluetoothDevice> deviceList;
     private BleDeviceConnection bleDeviceConn1, bleDeviceConn2;
+    private BleDeviceConnection bleDeviceConn;
 
     private boolean allConnected = false;
 
@@ -162,6 +163,11 @@ public class BluetoothLeService extends Service {
                 this, deviceList.get(1), new BluetoothGattCallbackImpl(1));
     }
 
+    public void initConnection(BluetoothDevice deviceList) {
+        bleDeviceConn = new BleDeviceConnection(
+                this, deviceList, new BluetoothGattCallbackImpl(0));
+    }
+
     public boolean connectAll() {
         boolean b1 = bleDeviceConn1.connect();
         boolean b2 = bleDeviceConn2.connect();
@@ -169,9 +175,17 @@ public class BluetoothLeService extends Service {
         return allConnected;
     }
 
+    public boolean connect() {
+        return bleDeviceConn.connect();
+    }
+
     public void disconnectAll() {
         bleDeviceConn1.disconnect();
         bleDeviceConn2.disconnect();
+    }
+
+    public void disconnect() {
+        bleDeviceConn.disconnect();
     }
 
     public void closeAll() {
@@ -179,7 +193,15 @@ public class BluetoothLeService extends Service {
         bleDeviceConn2.close();
     }
 
-    public boolean isDeviceConnected(int index) {
+    public void close() {
+        bleDeviceConn.close();
+    }
+
+    public boolean isDeviceConnected() {
+        return bleDeviceConn.isConnected();
+    }
+
+    public boolean isDeviceConnected_old(int index) {
         if (index == 0) {
             return bleDeviceConn1.isConnected();
         } else if (index == 1) {
@@ -217,6 +239,11 @@ public class BluetoothLeService extends Service {
             Log.d(TAG, "send packet to device1");
             bleDeviceConn2.writeCustomCharacteristic(packet);
         }
+    }
+
+    public void sendPacket(byte[] packet) {
+        Log.d(TAG, "send packet to device");
+        bleDeviceConn.writeCustomCharacteristic(packet);
     }
 
     public void sendPacketToAll(byte[] packet) {

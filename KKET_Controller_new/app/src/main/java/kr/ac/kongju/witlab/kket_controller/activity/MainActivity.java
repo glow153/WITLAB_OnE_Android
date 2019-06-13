@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
     public static final String EXTRAS_DEVICE_LIST = "DEVICE_LIST";
 
-    private ArrayList<BluetoothDevice> mDeviceList;
+    private BluetoothDevice mSelectedDevice;
     private BluetoothLeService mBluetoothLeService;
     private boolean manualOrAuto = true;
     private DataRepository dr;
@@ -61,22 +61,20 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
 
-            if (mDeviceList != null) {
-                if (mDeviceList != null) {
-                    mBluetoothLeService.initConnection(mDeviceList);
-                    mBluetoothLeService.connectAll();
-                    initConnectedDeviceView();
-                } else {
-                    Log.d(TAG, "mDeviceList == null");
-                    return;
-                }
+            if (mSelectedDevice != null) {
+                mBluetoothLeService.initConnection(mSelectedDevice);
+                mBluetoothLeService.connect();
+                initConnectedDeviceView();
+            } else {
+                Log.d(TAG, "mSelectedDevice == null");
+                return;
             }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            mBluetoothLeService.disconnectAll();
-            mBluetoothLeService.closeAll();
+            mBluetoothLeService.disconnect();
+            mBluetoothLeService.close();
             mBluetoothLeService = null;
         }
     };
@@ -92,32 +90,43 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             Log.d(TAG, "broadcast received : " + action);
+
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
+                // TODO: process when device GATT connected.
+
                 int index = intent.getIntExtra("deviceIndex", -1);
                 if (index != -1)
-                    updateConnectionState(index);
+                    updateConnectionState();
 
                 Toast.makeText(MainActivity.this,
                         index + "번 BLE 장치가 연결되었습니다.",
                         Toast.LENGTH_SHORT).show();
 
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
+                // TODO: process when device GATT disconnected.
+
                 int index = intent.getIntExtra("deviceIndex", -1);
                 if (index != -1)
-                    updateConnectionState(index);
+                    updateConnectionState();
 
                 Toast.makeText(MainActivity.this,
                         index + "번 BLE 장치의 연결이 끊어졌습니다.",
                         Toast.LENGTH_SHORT).show();
 
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+                // TODO: process when device GATT services discovered.
+
                 // Show all the supported services and characteristics on the user interface.
 //                displayGattServices(mBluetoothLeService.getSupportedGattServices());
 
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+                // TODO: process when there is available data of device GATT.
+
 //                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
 
             } else if (BluetoothLeService.CUSTOM_BLE_SERVICE_NOT_FOUND.equals(action)) {
+                // TODO: process when GATT service not found.
+
                 int index = intent.getIntExtra(BluetoothLeService.EXTRA_DEVICE_IDX, 0);
                 Toast.makeText(MainActivity.this,
                         index + "번 BLE 장치를 인식할 수 없습니다.",
@@ -136,11 +145,11 @@ public class MainActivity extends AppCompatActivity {
         dr = DataRepository.getInstance();
 
         final Intent intent = getIntent();
-        mDeviceList = (ArrayList<BluetoothDevice>) intent.getSerializableExtra(EXTRAS_DEVICE_LIST);
+        mSelectedDevice = intent.getParcelableExtra(EXTRAS_DEVICE_LIST);
 
         // init views
         listview1 = findViewById(R.id.levelListView1);
-        listview2 = findViewById(R.id.levelListView2);
+//        listview2 = findViewById(R.id.levelListView2);
         tvStatus = findViewById(R.id.status_caption);
         btnAutoMode = findViewById(R.id.btnAutoMode);
 
@@ -163,35 +172,68 @@ public class MainActivity extends AppCompatActivity {
 
     private void initConnectedDeviceView() {
         btnConn1 = findViewById(R.id.btnConnect1);
-        btnConn2 = findViewById(R.id.btnConnect2);
         tvName1 = findViewById(R.id.connected_device_name1);
-        tvName2 = findViewById(R.id.connected_device_name2);
         tvAddress1 = findViewById(R.id.connected_device_address1);
-        tvAddress2 = findViewById(R.id.connected_device_address2);
 
-        tvName1.setText(mDeviceList.get(0).getName());
-        tvName2.setText(mDeviceList.get(1).getName());
-        tvAddress1.setText(mDeviceList.get(0).getAddress());
-        tvAddress2.setText(mDeviceList.get(1).getAddress());
+        tvName1.setText(mSelectedDevice.getName());
+        tvAddress1.setText(mSelectedDevice.getAddress());
 
         btnConn1.setOnClickListener(v -> {
-            if (!mBluetoothLeService.isDeviceConnected(0)) {
-                mBluetoothLeService.connectDevice(0);
+            if (!mBluetoothLeService.isDeviceConnected()) {
+                mBluetoothLeService.connect();
             } else {
-                mBluetoothLeService.disconnectDevice(0);
+                mBluetoothLeService.disconnect();
             }
 
-        });
-        btnConn2.setOnClickListener(v -> {
-            if (!mBluetoothLeService.isDeviceConnected(1)) {
-                mBluetoothLeService.connectDevice(1);
-            } else {
-                mBluetoothLeService.disconnectDevice(1);
-            }
         });
     }
 
+//    private void initConnectedDeviceView_old() {
+//        btnConn1 = findViewById(R.id.btnConnect1);
+//        btnConn2 = findViewById(R.id.btnConnect2);
+//        tvName1 = findViewById(R.id.connected_device_name1);
+//        tvName2 = findViewById(R.id.connected_device_name2);
+//        tvAddress1 = findViewById(R.id.connected_device_address1);
+//        tvAddress2 = findViewById(R.id.connected_device_address2);
+//
+//        tvName1.setText(mSelectedDevice.get(0).getName());
+//        tvName2.setText(mSelectedDevice.get(1).getName());
+//        tvAddress1.setText(mSelectedDevice.get(0).getAddress());
+//        tvAddress2.setText(mSelectedDevice.get(1).getAddress());
+//
+//        btnConn1.setOnClickListener(v -> {
+//            if (!mBluetoothLeService.isDeviceConnected(0)) {
+//                mBluetoothLeService.connectDevice(0);
+//            } else {
+//                mBluetoothLeService.disconnectDevice(0);
+//            }
+//
+//        });
+//        btnConn2.setOnClickListener(v -> {
+//            if (!mBluetoothLeService.isDeviceConnected(1)) {
+//                mBluetoothLeService.connectDevice(1);
+//            } else {
+//                mBluetoothLeService.disconnectDevice(1);
+//            }
+//        });
+//    }
+
     private void initAdapter() {
+        ArrayList<ListViewItem> listViewItems1 = new ArrayList<>();
+
+        for (int i = 0; i < dr.getTotalCount(0); i++) {
+            ListViewItem item = new ListViewItem();
+            item.setIndex(i);
+            item.setPacket(dr.getPacket(i));
+            item.setInfo(dr.getInfo(i));
+            listViewItems1.add(item);
+        }
+
+        listAdapter1 = new LevelListAdapter(this, listViewItems1);
+        listview1.setAdapter(listAdapter1);
+    }
+
+    private void initAdapter_old() {
         ArrayList<ListViewItem> listViewItems1 = new ArrayList<>();
         ArrayList<ListViewItem> listViewItems2 = new ArrayList<>();
 
@@ -199,16 +241,16 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < dr.getTotalCount(0); i++) {
             ListViewItem item = new ListViewItem();
             item.setIndex(i);
-            item.setPacket(dr.getPacket(0, i));
-            item.setInfo(dr.getInfo(0, i));
+            item.setPacket(dr.getPacket(i));
+            item.setInfo(dr.getInfo(i));
             listViewItems1.add(item);
         }
 
         for (int i = 0; i < dr.getTotalCount(1); i++) {
             ListViewItem item = new ListViewItem();
             item.setIndex(i);
-            item.setPacket(dr.getPacket(1, i));
-            item.setInfo(dr.getInfo(1, i));
+            item.setPacket(dr.getPacket(i));
+            item.setInfo(dr.getInfo(i));
             listViewItems2.add(item);
         }
 
@@ -218,23 +260,34 @@ public class MainActivity extends AppCompatActivity {
         listview2.setAdapter(listAdapter2);
     }
 
-    public TimeSequenceChangeCallback timeCallback = (int devIdx, int pktIndex) -> {
+    public TimeSequenceChangeCallback timeCallback = (int pktIndex) -> {
         Log.d(TAG, "timeCallback");
         runOnUiThread(() -> {
-            if(devIdx == 0){
-                listAdapter1.checkOneItem(pktIndex);
-                listview1.setSelectionFromTop(pktIndex, 700);
-                Log.d("ThAutoMode.run()","auto packet send : " +
-                        listAdapter1.getItem(pktIndex).toString());
-            } else if(devIdx == 1) {
-                listAdapter2.checkOneItem(pktIndex);
-                listview2.setSelectionFromTop(pktIndex, 700);
-                Log.d("ThAutoMode.run()","auto packet send : " +
-                        listAdapter2.getItem(pktIndex).toString());
-            }
+            listAdapter1.checkOneItem(pktIndex);
+            listview1.setSelectionFromTop(pktIndex, 700);
+            Log.d("ThAutoMode.run()","auto packet send : " +
+                    listAdapter1.getItem(pktIndex).toString());
         });
-        sendPacket(devIdx, dr.getPacket(devIdx, pktIndex));
+        sendPacket(dr.getPacket(pktIndex));
     };
+
+//    public TimeSequenceChangeCallback timeCallback_old = (int devIdx, int pktIndex) -> {
+//        Log.d(TAG, "timeCallback");
+//        runOnUiThread(() -> {
+//            if(devIdx == 0){
+//                listAdapter1.checkOneItem(pktIndex);
+//                listview1.setSelectionFromTop(pktIndex, 700);
+//                Log.d("ThAutoMode.run()","auto packet send : " +
+//                        listAdapter1.getItem(pktIndex).toString());
+//            } else if(devIdx == 1) {
+//                listAdapter2.checkOneItem(pktIndex);
+//                listview2.setSelectionFromTop(pktIndex, 700);
+//                Log.d("ThAutoMode.run()","auto packet send : " +
+//                        listAdapter2.getItem(pktIndex).toString());
+//            }
+//        });
+//        sendPacket(devIdx, dr.getPacket(devIdx, pktIndex));
+//    };
 
     private void setListeners() {
         btnAutoMode.setOnClickListener(v -> {
@@ -243,9 +296,7 @@ public class MainActivity extends AppCompatActivity {
 
             // listview enable disable toggle
             listview1.setEnabled(manualOrAuto);
-            listview2.setEnabled(manualOrAuto);
             listAdapter1.notifyDataSetChanged();
-            listAdapter2.notifyDataSetChanged();
 
             if(manualOrAuto) { // manual mode (true)
                 tvStatus.setText(R.string.txt_manualmode);
@@ -266,44 +317,97 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 listAdapter1.checkOneItem(position); // it has notifyDataSetChanged()
             });
-            sendPacket(0, dr.getPacket(0, position));
-        });
-
-        listview2.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-            Log.d("listview.setOnClickListener", "listview clicked : " + position);
-            runOnUiThread(() -> {
-                listAdapter2.checkOneItem(position); // it has notifyDataSetChanged()
-            });
-            sendPacket(1, dr.getPacket(1, position));
+            sendPacket(dr.getPacket(position));
         });
     }
 
-    public void sendPacket(int deviceIndex, byte[] packet) {
-        if(mBluetoothLeService.isDeviceConnected(deviceIndex)) {
-            mBluetoothLeService.sendPacket(deviceIndex, packet);
+//    private void setListeners_old() {
+//        btnAutoMode.setOnClickListener(v -> {
+//            Log.d(TAG, "btnAutomode clicked");
+//            manualOrAuto = !manualOrAuto; // switch
+//
+//            // listview enable disable toggle
+//            listview1.setEnabled(manualOrAuto);
+//            listview2.setEnabled(manualOrAuto);
+//            listAdapter1.notifyDataSetChanged();
+//            listAdapter2.notifyDataSetChanged();
+//
+//            if(manualOrAuto) { // manual mode (true)
+//                tvStatus.setText(R.string.txt_manualmode);
+//                btnAutoMode.setText(R.string.manual_to_auto);
+//                // stop automode thread
+//                th.pauseThread();
+//
+//            } else { // auto mode (false)
+//                tvStatus.setText(R.string.txt_automode);
+//                btnAutoMode.setText(R.string.auto_to_manual);
+//                // start automode thread
+//                th.startThread();
+//            }
+//        });
+//
+//        listview1.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+//            Log.d("listview.setOnClickListener", "listview clicked : " + position);
+//            runOnUiThread(() -> {
+//                listAdapter1.checkOneItem(position); // it has notifyDataSetChanged()
+//            });
+//            sendPacket(0, dr.getPacket(0, position));
+//        });
+//
+//        listview2.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+//            Log.d("listview.setOnClickListener", "listview clicked : " + position);
+//            runOnUiThread(() -> {
+//                listAdapter2.checkOneItem(position); // it has notifyDataSetChanged()
+//            });
+//            sendPacket(1, dr.getPacket(1, position));
+//        });
+//    }
+
+    public void sendPacket(byte[] packet) {
+        if(mBluetoothLeService.isDeviceConnected()) {
+            mBluetoothLeService.sendPacket(packet);
         } else {
-            Log.d(TAG, "device" + deviceIndex + " not connected.");
-            Toast.makeText(this, "device"+deviceIndex+" is not connected.",
+            Log.d(TAG, "device is not connected.");
+            Toast.makeText(this, "device is not connected.",
                     Toast.LENGTH_LONG).show();
         }
     }
 
-    private void updateConnectionState(int deviceIndex) {
-        Log.d(TAG, "device" + deviceIndex + ": " + mBluetoothLeService.isDeviceConnected(deviceIndex));
-        if(deviceIndex == 0) {
-            if (!mBluetoothLeService.isDeviceConnected(deviceIndex)) {
-                btnConn1.setBackground(getDrawable(R.drawable.disconnected));
-            } else {
-                btnConn1.setBackground(getDrawable(R.drawable.connected));
-            }
-        } else if (deviceIndex == 1) {
-            if (!mBluetoothLeService.isDeviceConnected(deviceIndex)) {
-                btnConn2.setBackground(getDrawable(R.drawable.disconnected));
-            } else {
-                btnConn2.setBackground(getDrawable(R.drawable.connected));
-            }
+//    public void sendPacket_old(int deviceIndex, byte[] packet) {
+//        if(mBluetoothLeService.isDeviceConnected(deviceIndex)) {
+//            mBluetoothLeService.sendPacket(deviceIndex, packet);
+//        } else {
+//            Log.d(TAG, "device" + deviceIndex + " not connected.");
+//            Toast.makeText(this, "device"+deviceIndex+" is not connected.",
+//                    Toast.LENGTH_LONG).show();
+//        }
+//    }
+
+    private void updateConnectionState() {
+        Log.d(TAG, "device conn: " + mBluetoothLeService.isDeviceConnected());
+        if (!mBluetoothLeService.isDeviceConnected()) {
+            btnConn1.setBackground(getDrawable(R.drawable.disconnected));
+        } else {
+            btnConn1.setBackground(getDrawable(R.drawable.connected));
         }
     }
+
+//    private void updateConnectionState_old(int deviceIndex) {
+//        Log.d(TAG, "device" + deviceIndex + ": " + mBluetoothLeService.isDeviceConnected(deviceIndex));
+//        if(deviceIndex == 0) {
+//            if (!mBluetoothLeService.isDeviceConnected(deviceIndex)) {
+//                btnConn1.setBackground(getDrawable(R.drawable.disconnected));
+//            } else {
+//                btnConn1.setBackground(getDrawable(R.drawable.connected));
+//            }
+//        } else if (deviceIndex == 1) {
+//            if (!mBluetoothLeService.isDeviceConnected(deviceIndex)) {
+//                btnConn2.setBackground(getDrawable(R.drawable.disconnected));
+//            } else {
+//                btnConn2.setBackground(getDrawable(R.drawable.connected));
+//            }
+//        }
+//    }
 
     @Override
     protected void onStart() {
