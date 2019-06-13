@@ -29,34 +29,34 @@ public class ThAutoMode extends Thread {
     @Override
     public void run() {
         DataRepository dr = DataRepository.getInstance();
-        Date[] timetable = dr.getDateObjTable();
-        while (!kill) {
-            if(bRunning) {
-                // TODO: running process here
-                Log.d("ThAutoMode.run()","automode thread is running");
-
-                for (int i = 1; i < timetable.length - 1; i++) {
-                    Calendar calnow = Calendar.getInstance();
-                    calnow.set(0, 0, 0);
-
-                    long start = timetable[i].getTime();
-                    long now = calnow.getTime().getTime();
-                    long end = timetable[i+1].getTime();
-
-                    if (start <= now && now < end & i != currentLevel) {
-                        callback.changeTimeSeq(i);
-                        currentLevel = i; // inhibit double occurrence
-                        break;
-                    }
-                }
-            }
-
-            try {
-                sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        Date[] timetable = dr.getDateObjTable();
+//        while (!kill) {
+//            if(bRunning) {
+//                // TODO: running process here
+//                Log.d("ThAutoMode.run()","automode thread is running");
+//
+//                for (int i = 1; i < timetable.length - 1; i++) {
+//                    Calendar calnow = Calendar.getInstance();
+//                    calnow.set(0, 0, 0);
+//
+//                    long start = timetable[i].getTime();
+//                    long now = calnow.getTime().getTime();
+//                    long end = timetable[i+1].getTime();
+//
+//                    if (start <= now && now < end & i != currentLevel) {
+//                        callback.changeTimeSeq(i);
+//                        currentLevel = i; // inhibit double occurrence
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            try {
+//                sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         bRunning = false;
         kill = true;

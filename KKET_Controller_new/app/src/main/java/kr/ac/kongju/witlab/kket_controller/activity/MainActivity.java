@@ -16,7 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,10 +27,11 @@ import java.util.ArrayList;
 import kr.ac.kongju.witlab.kket_controller.R;
 import kr.ac.kongju.witlab.kket_controller.daemons.ThAutoMode;
 import kr.ac.kongju.witlab.kket_controller.adapter.LevelListAdapter;
-import kr.ac.kongju.witlab.kket_controller.adapter.ListViewItem;
+import kr.ac.kongju.witlab.kket_controller.adapter.LevelListItem;
 import kr.ac.kongju.witlab.kket_controller.bluetooth_le.BluetoothLeService;
 import kr.ac.kongju.witlab.kket_controller.callback.TimeSequenceChangeCallback;
 import kr.ac.kongju.witlab.kket_controller.model.DataRepository;
+import kr.ac.kongju.witlab.kket_controller.model.ModeSelectorVO;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
@@ -39,13 +42,20 @@ public class MainActivity extends AppCompatActivity {
     private boolean manualOrAuto = true;
     private DataRepository dr;
     private ThAutoMode th;
+
+    // views
+    private Button btnAutoMode;
     private TextView tvStatus;
-    private ListView listview;
     private Button btnConn;
     private TextView tvName;
     private TextView tvAddress;
-    private LevelListAdapter listAdapter1 = null;
-    private Button btnAutoMode;
+    private RadioGroup rgModeSelector;
+    private LinearLayout manualPacketSender;
+
+    private ListView listview;
+    private LevelListAdapter listAdapter = null;
+
+    private ModeSelectorVO ms;
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -55,7 +65,10 @@ public class MainActivity extends AppCompatActivity {
 
             // Automatically connects to devices upon successful start-up initialization.
             if (!mBluetoothLeService.initialize()) {
-                Log.e(TAG, "Unable to initialize Bluetooth");
+                Toast.makeText(getApplicationContext(),
+                        "Unable to initialize Bluetooth.",
+                        Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Unable to initialize Bluetooth!!!");
                 finish();
             }
 
@@ -134,36 +147,49 @@ public class MainActivity extends AppCompatActivity {
         manualOrAuto = true;
         dr = DataRepository.getInstance();
 
+        // init mode selector
+        ms = ModeSelectorVO.getInstance();
+
+        // get data (connected ble device) from DeviceScanActivity as an object
         final Intent intent = getIntent();
         mSelectedDevice = intent.getParcelableExtra(EXTRAS_DEVICE_LIST);
 
+        bindView();
+        if(getSupportActionBar()!=null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        initBleConnection();
+        initAdapter(ms.getMode());
+        setListeners();
+    }
+
+    private void bindView() {
         // init views
-        listview = findViewById(R.id.levelListView1);
-//        listview2 = findViewById(R.id.levelListView2);
         tvStatus = findViewById(R.id.status_caption);
         btnAutoMode = findViewById(R.id.btnAutoMode);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        initBleConnection();
-        initAdapter();
-        setListeners();
+        rgModeSelector = findViewById(R.id.rdgroup);
+        manualPacketSender = findViewById(R.id.manualmode);
+        manualPacketSender.setVisibility(View.GONE);
+
+        listview = findViewById(R.id.levelListView);
     }
 
     private void initBleConnection() {
         // init ble and bind service
+        Log.d(TAG, "initBleConnection() : bindService called");
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-        Log.d(TAG, "bindService called");
 
         //register receiver
+        Log.d(TAG, "initBleConnection() : registerReceiver called");
         registerReceiver(mBroadcastReceiver, makeBroadcastReceiverIntentFilter());
-        Log.d(TAG, "registerReceiver called");
     }
 
     private void initConnectedDeviceView() {
-        btnConn = findViewById(R.id.btnConnect1);
-        tvName = findViewById(R.id.connected_device_name1);
-        tvAddress = findViewById(R.id.connected_device_address1);
+        btnConn = findViewById(R.id.btnConnect);
+        tvName = findViewById(R.id.connected_device_name);
+        tvAddress = findViewById(R.id.connected_device_address);
 
         tvName.setText(mSelectedDevice.getName());
         tvAddress.setText(mSelectedDevice.getAddress());
@@ -178,30 +204,34 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initAdapter() {
-        ArrayList<ListViewItem> listViewItems1 = new ArrayList<>();
+    private void initAdapter(int mode) {
+        // TODO: process when LevelListAdapter be initiated with selected mode
+        Log.d(TAG, "initAdapter() start : make LevelListAdapter");
+        ArrayList<LevelListItem> levelListItems = new ArrayList<>();
 
-        for (int i = 0; i < dr.getTotalCount(0); i++) {
-            ListViewItem item = new ListViewItem();
+        for (int i = 0; i < dr.getPacketTableCount(mode); i++) {
+            LevelListItem item = new LevelListItem();
             item.setIndex(i);
-            item.setPacket(dr.getPacket(i));
-            item.setInfo(dr.getInfo(i));
-            listViewItems1.add(item);
+            item.setPacket(dr.getPacket(mode, i));
+            item.setTitle(); // set default title
+            item.setInfo(); // set default info
+            levelListItems.add(item);
         }
 
-        listAdapter1 = new LevelListAdapter(this, listViewItems1);
-        listview.setAdapter(listAdapter1);
+        listAdapter = new LevelListAdapter(this, levelListItems);
+        listview.setAdapter(listAdapter);
+        Log.d(TAG, "initAdapter() end : LevelListAdapter made");
     }
 
     public TimeSequenceChangeCallback timeCallback = (int pktIndex) -> {
         Log.d(TAG, "timeCallback");
         runOnUiThread(() -> {
-            listAdapter1.checkOneItem(pktIndex);
+            listAdapter.checkOneItem(pktIndex);
             listview.setSelectionFromTop(pktIndex, 700);
             Log.d("ThAutoMode.run()","auto packet send : " +
-                    listAdapter1.getItem(pktIndex).toString());
+                    listAdapter.getItem(pktIndex).toString());
         });
-        sendPacket(dr.getPacket(pktIndex));
+        sendPacket(dr.getPacket(ms.getMode(), pktIndex));
     };
 
     private void setListeners() {
@@ -211,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
 
             // listview enable disable toggle
             listview.setEnabled(manualOrAuto);
-            listAdapter1.notifyDataSetChanged();
+            listAdapter.notifyDataSetChanged();
 
             if(manualOrAuto) { // manual mode (true)
                 tvStatus.setText(R.string.txt_manualmode);
@@ -228,11 +258,40 @@ public class MainActivity extends AppCompatActivity {
         });
 
         listview.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-            Log.d("listview.setOnClickListener", "listview clicked : " + position);
+            Log.d(TAG, "listview clicked : " + position);
             runOnUiThread(() -> {
-                listAdapter1.checkOneItem(position); // it has notifyDataSetChanged()
+                listAdapter.checkOneItem(position); // it has notifyDataSetChanged()
             });
-            sendPacket(dr.getPacket(position));
+            sendPacket(dr.getPacket(ms.getMode(), position));
+        });
+
+        rgModeSelector.setOnCheckedChangeListener((RadioGroup group, int checkedId) -> {
+            // TODO: process when mode selector (radio button) clicked
+            Log.d(TAG, "rgModeSelector id changed: " + checkedId);
+
+            switch(checkedId) {
+            case R.id.rdbtn_15:
+                ms.setMode(0);
+                break;
+            case R.id.rdbtn_69:
+                ms.setMode(1);
+                break;
+            case R.id.rdbtn_test:
+                ms.setMode(2);
+                break;
+            case R.id.rdbtn_manual:
+                ms.setMode(3);
+                break;
+            default:
+                break;
+            }
+
+            if (checkedId == R.id.rdbtn_manual) {
+                manualPacketSender.setVisibility(View.VISIBLE);
+            } else {
+                manualPacketSender.setVisibility(View.GONE);
+                initAdapter(ms.getMode());
+            }
         });
     }
 

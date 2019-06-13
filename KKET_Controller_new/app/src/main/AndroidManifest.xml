@@ -13,19 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="kr.ac.kongju.witlab.kket_controller.activity.DeviceScanActivity">
+        <activity android:name=".activity.AboutActivity"></activity>
+        <activity android:name=".activity.DeviceScanActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="kr.ac.kongju.witlab.kket_controller.activity.MainActivity" />
+        <activity android:name=".activity.MainActivity" />
 
         <service
-            android:name="kr.ac.kongju.witlab.kket_controller.bluetooth_le.BluetoothLeService"
+            android:name=".bluetooth_le.BluetoothLeService"
             android:enabled="true" />
-
     </application>
 
 </manifest>

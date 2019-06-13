@@ -54,7 +54,7 @@
             android:layout_margin="5dp">
 
             <Button
-                android:id="@+id/btnConnect1"
+                android:id="@+id/btnConnect"
                 android:background="@drawable/connected"
                 android:layout_gravity="center"
                 android:layout_width="30dp"
@@ -68,7 +68,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/connected_device_name1"
+                    android:id="@+id/connected_device_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
@@ -76,7 +76,7 @@
                     android:textSize="20sp"/>
 
                 <TextView
-                    android:id="@+id/connected_device_address1"
+                    android:id="@+id/connected_device_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2"
@@ -98,13 +98,27 @@
         android:background="#3377ee"/>
     <!-- border -->
 
+    <include
+        layout="@layout/mode_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <!-- border -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#3377ee"/>
+    <!-- border -->
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ListView
-            android:id="@+id/levelListView1"
+            android:id="@+id/levelListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"

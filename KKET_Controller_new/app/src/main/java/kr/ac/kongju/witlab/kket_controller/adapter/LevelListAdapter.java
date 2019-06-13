@@ -11,24 +11,24 @@ import java.util.ArrayList;
 import kr.ac.kongju.witlab.kket_controller.R;
 
 public class LevelListAdapter extends BaseAdapter {
-    private ArrayList<ListViewItem> listViewItems;
+    private ArrayList<LevelListItem> levelListItems;
     private LayoutInflater mInflater;
 
     private boolean enabled = true;
 
-    public LevelListAdapter(Context context, ArrayList<ListViewItem> listViewItems) {
-        this.listViewItems = listViewItems;
+    public LevelListAdapter(Context context, ArrayList<LevelListItem> levelListItems) {
+        this.levelListItems = levelListItems;
         mInflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
-        return listViewItems.size();
+        return levelListItems.size();
     }
 
     @Override
-    public ListViewItem getItem(int position) {
-        return listViewItems.get(position);
+    public LevelListItem getItem(int position) {
+        return levelListItems.get(position);
     }
 
     @Override
@@ -38,23 +38,23 @@ public class LevelListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ListItemViewHolder holder;
+        LevelListItemViewHolder holder;
 
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.level_list_item, parent, false);
 
-            holder = new ListItemViewHolder();
+            holder = new LevelListItemViewHolder();
             holder.rdb = convertView.findViewById(R.id.rdbLevelList);
             holder.tvControlValues = convertView.findViewById(R.id.tvControlValues);
             holder.tvInfo = convertView.findViewById(R.id.tvInfo);
 
             convertView.setTag(holder);
         } else {
-            holder = (ListItemViewHolder) convertView.getTag();
+            holder = (LevelListItemViewHolder) convertView.getTag();
         }
 
         // set item values through holder
-        ListViewItem item = listViewItems.get(position);
+        LevelListItem item = levelListItems.get(position);
         holder.rdb.setChecked(item.isChecked());
         holder.tvControlValues.setText(item.getTitle());
         holder.tvInfo.setText(item.getInfo());
@@ -70,8 +70,8 @@ public class LevelListAdapter extends BaseAdapter {
     }
 
     public void checkOneItem(int position) {
-        listViewItems.forEach((item) -> item.setChecked(false));
-        listViewItems.get(position).setChecked(true);
+        levelListItems.forEach((item) -> item.setChecked(false));
+        levelListItems.get(position).setChecked(true);
         notifyDataSetChanged();
     }
 

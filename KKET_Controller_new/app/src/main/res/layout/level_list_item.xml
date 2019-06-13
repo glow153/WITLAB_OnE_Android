@@ -13,15 +13,16 @@
     <RadioButton
         android:id="@+id/rdbLevelList"
         android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:gravity="center"
         android:focusable="false"
         android:clickable="false"/>
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_weight="9"
+        android:layout_weight="8"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -29,6 +30,7 @@
             android:id="@+id/tvControlValues"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:textSize="20sp"
             android:textColor="#000000"/>
 
@@ -36,8 +38,8 @@
             android:id="@+id/tvInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:lines="2"/>
+            android:layout_margin="2dp"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
