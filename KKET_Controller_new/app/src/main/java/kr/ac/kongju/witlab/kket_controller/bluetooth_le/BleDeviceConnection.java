@@ -136,7 +136,7 @@ public class BleDeviceConnection {
             return;
         }
         /*check if the service is available on the device*/
-//        Log.d(TAG, "uuid: " + service_uuid + "," + write_char_uuid + "," + read_char_uuid);
+        Log.d(TAG, "uuid: " + service_uuid + "," + write_char_uuid + "," + read_char_uuid);
         BluetoothGattService mCustomService = gatt.getService(service_uuid);
         if(mCustomService == null) {
             Log.w(TAG, "Custom BLE Service not found");

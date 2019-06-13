@@ -1,4 +1,4 @@
-package kr.ac.kongju.witlab.kket_controller;
+package kr.ac.kongju.witlab.kket_controller.daemons;
 
 import android.util.Log;
 
@@ -44,8 +44,7 @@ public class ThAutoMode extends Thread {
                     long end = timetable[i+1].getTime();
 
                     if (start <= now && now < end & i != currentLevel) {
-                        callback.changeTimeSeq(0, i);
-                        callback.changeTimeSeq(1, i);
+                        callback.changeTimeSeq(i);
                         currentLevel = i; // inhibit double occurrence
                         break;
                     }

@@ -35,9 +35,6 @@ import java.util.ArrayList;
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
- *
- *
- * 인텍 UUID = FF00, Write = FF01 , Read = FF02
  */
 
 public class BluetoothLeService extends Service {
@@ -45,12 +42,7 @@ public class BluetoothLeService extends Service {
 
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
-//    private LinkedList<BleDeviceConnection> deviceConnPool;
-    ArrayList<BluetoothDevice> deviceList;
-    private BleDeviceConnection bleDeviceConn1, bleDeviceConn2;
     private BleDeviceConnection bleDeviceConn;
-
-    private boolean allConnected = false;
 
     public final static String ACTION_GATT_CONNECTED =
             "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
@@ -66,23 +58,16 @@ public class BluetoothLeService extends Service {
     public final static String EXTRA_DEVICE_IDX = "device_index";
 
     public class BluetoothGattCallbackImpl extends BluetoothGattCallback {
-        public int deviceIndex = -1;
-        public BluetoothGattCallbackImpl(int index) {
-            deviceIndex = index;
-        }
+
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             String intentAction;
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 intentAction = BluetoothLeService.ACTION_GATT_CONNECTED;
 
-                if(deviceIndex == 0){
-                    bleDeviceConn1.setConnectionState(true);
-                }else if(deviceIndex == 1){
-                    bleDeviceConn2.setConnectionState(true);
-                }
+                bleDeviceConn.setConnectionState(true);
 
-                broadcastUpdate(intentAction, deviceIndex);
+                broadcastUpdate(intentAction);
                 Log.i(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
                 // MUST RUN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -92,20 +77,16 @@ public class BluetoothLeService extends Service {
                 intentAction = BluetoothLeService.ACTION_GATT_DISCONNECTED;
                 Log.i(TAG, "Disconnected from GATT server.");
 
-                if(deviceIndex == 0){
-                    bleDeviceConn1.setConnectionState(false);
-                }else if(deviceIndex == 1){
-                    bleDeviceConn2.setConnectionState(false);
-                }
+                bleDeviceConn.setConnectionState(false);
 
-                broadcastUpdate(intentAction, deviceIndex);
+                broadcastUpdate(intentAction);
             }
         }
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                broadcastUpdate(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED, deviceIndex);
+                broadcastUpdate(BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED);
             } else {
                 Log.w(TAG, "onServicesDiscovered received: " + status);
             }
@@ -154,43 +135,17 @@ public class BluetoothLeService extends Service {
         return true;
     }
 
-    public void initConnection(ArrayList<BluetoothDevice> deviceList) {
-        if(this.deviceList == null)
-            this.deviceList = deviceList;
-        bleDeviceConn1 = new BleDeviceConnection(
-                this, deviceList.get(0), new BluetoothGattCallbackImpl(0));
-        bleDeviceConn2 = new BleDeviceConnection(
-                this, deviceList.get(1), new BluetoothGattCallbackImpl(1));
-    }
-
     public void initConnection(BluetoothDevice deviceList) {
         bleDeviceConn = new BleDeviceConnection(
-                this, deviceList, new BluetoothGattCallbackImpl(0));
-    }
-
-    public boolean connectAll() {
-        boolean b1 = bleDeviceConn1.connect();
-        boolean b2 = bleDeviceConn2.connect();
-        allConnected = (b1 && b2);
-        return allConnected;
+                this, deviceList, new BluetoothGattCallbackImpl());
     }
 
     public boolean connect() {
         return bleDeviceConn.connect();
     }
 
-    public void disconnectAll() {
-        bleDeviceConn1.disconnect();
-        bleDeviceConn2.disconnect();
-    }
-
     public void disconnect() {
         bleDeviceConn.disconnect();
-    }
-
-    public void closeAll() {
-        bleDeviceConn1.close();
-        bleDeviceConn2.close();
     }
 
     public void close() {
@@ -201,56 +156,10 @@ public class BluetoothLeService extends Service {
         return bleDeviceConn.isConnected();
     }
 
-    public boolean isDeviceConnected_old(int index) {
-        if (index == 0) {
-            return bleDeviceConn1.isConnected();
-        } else if (index == 1) {
-            return bleDeviceConn2.isConnected();
-        }
-        return false;
-    }
-
-    public boolean isAllConnected() {
-        return allConnected;
-    }
-
-    public boolean connectDevice(int index) {
-        if (index == 0) {
-            return bleDeviceConn1.connect();
-        } else if (index == 1) {
-            return bleDeviceConn2.connect();
-        }
-        return false;
-    }
-
-    public void disconnectDevice(int index) {
-        if (index == 0) {
-            bleDeviceConn1.disconnect();
-        } else if (index == 1) {
-            bleDeviceConn2.disconnect();
-        }
-    }
-
-    public void sendPacket(int deviceIndex, byte[] packet) {
-        if (deviceIndex == 0) {
-            Log.d(TAG, "send packet to device0");
-            bleDeviceConn1.writeCustomCharacteristic(packet);
-        } else if (deviceIndex == 1) {
-            Log.d(TAG, "send packet to device1");
-            bleDeviceConn2.writeCustomCharacteristic(packet);
-        }
-    }
-
     public void sendPacket(byte[] packet) {
         Log.d(TAG, "send packet to device");
         bleDeviceConn.writeCustomCharacteristic(packet);
     }
-
-    public void sendPacketToAll(byte[] packet) {
-        bleDeviceConn1.writeCustomCharacteristic(packet);
-        bleDeviceConn2.writeCustomCharacteristic(packet);
-    }
-
 
 
 
@@ -273,7 +182,7 @@ public class BluetoothLeService extends Service {
         // After using a given device, you should make sure that BluetoothGatt.close() is called
         // such that resources are cleaned up properly.  In this particular example, close() is
         // invoked when the UI is disconnected from the Service.
-        disconnectAll();
+        disconnect();
         return super.onUnbind(intent);
     }
 
@@ -281,9 +190,9 @@ public class BluetoothLeService extends Service {
     /************************ Jake: broadcast sender *************************
      *  bluetoothLeService.sendBroadcast() -> MainActivity.BroadcastReceiver
      */
-    public void broadcastUpdate(String action, int deviceIndex) {
+    public void broadcastUpdate(String action) {
         final Intent intent = new Intent(action);
-        intent.putExtra("deviceIndex", deviceIndex);
+//        intent.putExtra("deviceIndex", deviceIndex);
         sendBroadcast(intent);
     }
 

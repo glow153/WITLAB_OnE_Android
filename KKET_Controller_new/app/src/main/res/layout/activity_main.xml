@@ -44,14 +44,12 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:weightSum="2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp">
 
@@ -88,55 +86,6 @@
 
         </LinearLayout>
 
-        <!-- border -->
-        <LinearLayout
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="#3377ee"/>
-        <!-- border -->
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp">
-
-            <Button
-                android:id="@+id/btnConnect2"
-                android:background="@drawable/connected"
-                android:layout_gravity="center"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_margin="13dp"/>
-
-            <LinearLayout
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/connected_device_name2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#000000"
-                    android:text="3"
-                    android:textSize="20sp"/>
-
-                <TextView
-                    android:id="@+id/connected_device_address2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4"
-                    android:textSize="14sp"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
 
     </LinearLayout>
 
@@ -151,31 +100,12 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:weightSum="2"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ListView
             android:id="@+id/levelListView1"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:choiceMode="singleChoice"/>
-
-        <!-- border -->
-        <LinearLayout
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="#3377ee"/>
-        <!-- border -->
-
-        <ListView
-            android:id="@+id/levelListView2"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:choiceMode="singleChoice"/>
