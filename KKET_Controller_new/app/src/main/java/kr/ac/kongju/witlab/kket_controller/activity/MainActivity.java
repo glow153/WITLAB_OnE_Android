@@ -154,10 +154,11 @@ public class MainActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         mSelectedDevice = intent.getParcelableExtra(EXTRAS_DEVICE_LIST);
 
-        bindView();
         if(getSupportActionBar()!=null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        bindView();
         initBleConnection();
         initAdapter(ms.getMode());
         setListeners();
@@ -236,24 +237,27 @@ public class MainActivity extends AppCompatActivity {
 
     private void setListeners() {
         btnAutoMode.setOnClickListener(v -> {
+            // TODO: auto mode process => TO BE CONTINUED...
             Log.d(TAG, "btnAutomode clicked");
             manualOrAuto = !manualOrAuto; // switch
 
-            // listview enable disable toggle
-            listview.setEnabled(manualOrAuto);
-            listAdapter.notifyDataSetChanged();
+//            // listview enable disable toggle
+//            listview.setEnabled(manualOrAuto);
+//            listAdapter.notifyDataSetChanged();
 
             if(manualOrAuto) { // manual mode (true)
                 tvStatus.setText(R.string.txt_manualmode);
                 btnAutoMode.setText(R.string.manual_to_auto);
+
                 // stop automode thread
-                th.pauseThread();
+//                th.pauseThread();
 
             } else { // auto mode (false)
                 tvStatus.setText(R.string.txt_automode);
                 btnAutoMode.setText(R.string.auto_to_manual);
+
                 // start automode thread
-                th.startThread();
+//                th.startThread();
             }
         });
 
@@ -375,37 +379,28 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_device_control, menu);
-//        if (mBluetoothLeService.isAllConnected()) {
-//            menu.findItem(R.id.menu_connect_all).setVisible(false);
-//            menu.findItem(R.id.menu_disconnect_all).setVisible(true);
-//        } else {
-//            menu.findItem(R.id.menu_connect_all).setVisible(true);
-//            menu.findItem(R.id.menu_disconnect_all).setVisible(false);
-//        }
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.menu_connect_all:
-//                Log.d(TAG, "connectDevice menu clicked");
-//                if (!mBluetoothLeService.connectAll()) {
-//                    Log.d(TAG,"connect all failed :(");
-//                } else {
-//                    th.startThread();
-//                }
-//                return true;
-//            case R.id.menu_disconnect_all:
-//                Log.d(TAG, "disconnectDevice menu clicked");
-//                mBluetoothLeService.disconnectAll();
-//                th.pauseThread();
-//                return true;
-//            case android.R.id.home:
-//                finish();
-//                return true;
-//        }
+        switch (item.getItemId()) {
+        case android.R.id.home: //toolbar의 back키 눌렀을 때 동작
+            th.pauseThread();
+            th.killThread();
+            th = null;
+            finish();
+            return true;
+
+        case R.id.menu_about:
+            Log.d(TAG, "options menu - about touched");
+            th.pauseThread();
+
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
