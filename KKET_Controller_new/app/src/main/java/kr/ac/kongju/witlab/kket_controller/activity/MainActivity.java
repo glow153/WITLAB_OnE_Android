@@ -7,15 +7,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -51,6 +55,16 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvAddress;
     private RadioGroup rgModeSelector;
     private LinearLayout manualPacketSender;
+
+    // manual mode
+    private TextView tvManualSum;
+    private EditText edtM0;
+    private EditText edtM1;
+    private EditText edtM2;
+    private EditText edtM3;
+    private Button btnManualSend;
+
+
 
     private ListView listview;
     private LevelListAdapter listAdapter = null;
@@ -172,6 +186,13 @@ public class MainActivity extends AppCompatActivity {
         rgModeSelector = findViewById(R.id.rdgroup);
         manualPacketSender = findViewById(R.id.manualmode);
         manualPacketSender.setVisibility(View.GONE);
+
+        tvManualSum = findViewById(R.id.tv_manual_value_sum);
+        edtM0 = findViewById(R.id.edtM0);
+        edtM1 = findViewById(R.id.edtM1);
+        edtM2 = findViewById(R.id.edtM2);
+        edtM3 = findViewById(R.id.edtM3);
+        btnManualSend = findViewById(R.id.btn_manual_send);
 
         listview = findViewById(R.id.levelListView);
     }
@@ -297,6 +318,83 @@ public class MainActivity extends AppCompatActivity {
                 initAdapter(ms.getMode());
             }
         });
+
+        TextWatcher tw = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void afterTextChanged(Editable s) {
+                int sum = calcManualPacketSum();
+                tvManualSum.setText(String.format("%d", sum));
+                if (sum >= 256) {
+                    tvManualSum.setTextColor(Color.RED);
+                } else {
+                    tvManualSum.setTextColor(Color.BLACK);
+                }
+            }
+        };
+
+        edtM0.addTextChangedListener(tw);
+        edtM1.addTextChangedListener(tw);
+        edtM2.addTextChangedListener(tw);
+        edtM3.addTextChangedListener(tw);
+
+        btnManualSend.setOnClickListener(v -> {
+            if (calcManualPacketSum() >= 256) {
+                Toast.makeText(MainActivity.this, "채널 값 총합이 256 이상입니다.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                sendPacket(makeCustomPacket());
+            }
+        });
+    }
+
+    private byte[] makeCustomPacket() {
+        int m0 = 0, m1 = 0, m2 = 0, m3 = 0;
+
+        try {
+            m0 = Integer.parseInt(edtM0.getText().toString());
+        } catch (NumberFormatException | NullPointerException e) {}
+
+        try {
+            m1 = Integer.parseInt(edtM1.getText().toString());
+        } catch (NumberFormatException | NullPointerException e) {}
+
+        try {
+            m2 = Integer.parseInt(edtM2.getText().toString());
+        } catch (NumberFormatException | NullPointerException e) {}
+
+        try {
+            m3 = Integer.parseInt(edtM3.getText().toString());
+        } catch (NumberFormatException | NullPointerException e) {}
+
+
+        return new byte[] {(byte)0x01, (byte)0x02, (byte)m0, (byte)m1, (byte)m2, (byte)m3};
+    }
+
+    private int calcManualPacketSum() {
+        int m0 = 0, m1 = 0, m2 = 0, m3 = 0;
+
+        try {
+            m0 = Integer.parseInt(edtM0.getText().toString());
+        } catch (NumberFormatException | NullPointerException e) {}
+
+        try {
+            m1 = Integer.parseInt(edtM1.getText().toString());
+        } catch (NumberFormatException | NullPointerException e) {}
+
+        try {
+            m2 = Integer.parseInt(edtM2.getText().toString());
+        } catch (NumberFormatException | NullPointerException e) {}
+
+        try {
+            m3 = Integer.parseInt(edtM3.getText().toString());
+        } catch (NumberFormatException | NullPointerException e) {}
+
+
+        return m0 + m1 + m2 + m3;
     }
 
     public void sendPacket(byte[] packet) {
@@ -365,7 +463,7 @@ public class MainActivity extends AppCompatActivity {
         unbindService(mServiceConnection);
         Log.d(TAG, "unbindService called");
 
-        Log.d(TAG, "unbindService called, stop thread");
+        Log.d(TAG, "kill thread");
         th.killThread();
         th = null;
 
