@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -330,8 +331,10 @@ public class MainActivity extends AppCompatActivity {
                 tvManualSum.setText(String.format("%d", sum));
                 if (sum >= 256) {
                     tvManualSum.setTextColor(Color.RED);
+                    tvManualSum.setTypeface(null, Typeface.BOLD);
                 } else {
                     tvManualSum.setTextColor(Color.BLACK);
+                    tvManualSum.setTypeface(null, Typeface.NORMAL);
                 }
             }
         };
