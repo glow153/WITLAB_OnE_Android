@@ -3,8 +3,8 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "kr.ac.kongju.witlab.kket_controller"
-        minSdkVersion 18
+        applicationId "kr.ac.kongju.witlab.kket_controller_1"
+        minSdkVersion 23
         targetSdkVersion 26
         versionCode 1
         versionName "1.0.0"

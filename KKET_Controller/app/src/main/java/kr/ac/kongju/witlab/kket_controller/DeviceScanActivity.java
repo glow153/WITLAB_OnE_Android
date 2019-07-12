@@ -16,6 +16,7 @@
 
 package kr.ac.kongju.witlab.kket_controller;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
 public class DeviceScanActivity extends ListActivity {
+    public static final int PERMISSION_REQUEST_COARSE_LOCATION = 7;
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
@@ -76,6 +78,9 @@ public class DeviceScanActivity extends ListActivity {
             finish();
             return;
         }
+
+        requestPermissions(new String[]{
+                Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
     }
 
     @Override
