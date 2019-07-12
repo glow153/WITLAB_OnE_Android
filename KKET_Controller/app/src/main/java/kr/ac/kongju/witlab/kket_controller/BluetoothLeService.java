@@ -40,7 +40,6 @@ import java.util.UUID;
  * given Bluetooth LE device.
  *
  *
- * 인텍 UUID = FF00, Write = FF01 , Read = FF02
  */
 
 public class BluetoothLeService extends Service {
@@ -336,6 +335,7 @@ public class BluetoothLeService extends Service {
     }
 
     public void writeCustomCharacteristic(byte[] value) {
+        Log.d(TAG, "jake: writeCustomCharacteristic!");
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return;
@@ -344,21 +344,48 @@ public class BluetoothLeService extends Service {
 
         //ENTEC
 //        BluetoothGattService mCustomService = mBluetoothGatt.getService(UUID.fromString("0000FF00-0000-1000-8000-00805F9B34FB"));
-        //KEUMKANG
+        //KEUMKANG HM-10
         BluetoothGattService mCustomService = mBluetoothGatt.getService(UUID.fromString("0000FFE0-0000-1000-8000-00805F9B34FB"));
-        if(mCustomService == null){
-            Log.w(TAG, "Custom BLE Service not found");
-            return;
-        }
-        /*get the read characteristic from the service*/
-        //ENTEC
+
+        Log.d(TAG, "jake:");
+        if(mCustomService == null) {
+            mCustomService = mBluetoothGatt.getService(UUID.fromString("0000dfb0-0000-1000-8000-00805F9B34FB"));
+            if(mCustomService == null) {
+                Log.w(TAG, "Custom BLE Service not found");
+                return;
+            }
+        } else {
+            Log.w(TAG, "jake: BLE service found!");
+
+            /*get the read characteristic from the service*/
+            //ENTEC
 //        BluetoothGattCharacteristic mWriteCharacteristic = mCustomService.getCharacteristic(UUID.fromString("0000FF01-0000-1000-8000-00805F9B34FB"));
-        //KEUMKANG
-        BluetoothGattCharacteristic mWriteCharacteristic = mCustomService.getCharacteristic(UUID.fromString("0000FFE1-0000-1000-8000-00805F9B34FB"));
+            //KEUMKANG
+            BluetoothGattCharacteristic mWriteCharacteristic = mCustomService.getCharacteristic(UUID.fromString("0000FFE1-0000-1000-8000-00805F9B34FB"));
 //        mWriteCharacteristic.setValue(value,android.bluetooth.BluetoothGattCharacteristic.FORMAT_UINT8,0);
-        mWriteCharacteristic.setValue(value);
-        if(!mBluetoothGatt.writeCharacteristic(mWriteCharacteristic)){
-            Log.w(TAG, "Failed to write characteristic");
+
+//            if(!mBluetoothGatt.writeCharacteristic(mWriteCharacteristic)){
+//                mWriteCharacteristic = mCustomService.getCharacteristic(UUID.fromString("0000dfb2-0000-1000-8000-00805F9B34FB"));
+//                if(!mBluetoothGatt.writeCharacteristic(mWriteCharacteristic)) {
+//                    Log.w(TAG, "Failed to write characteristic");
+//                    return;
+//                }
+//            } else {
+//                Log.w(TAG, "jake: BLE write service found!");
+//                mWriteCharacteristic.setValue(value);
+//                Log.w(TAG, "send packet : " + value);
+//            }
+            if(mWriteCharacteristic == null){
+                mWriteCharacteristic = mCustomService.getCharacteristic(UUID.fromString("0000dfb2-0000-1000-8000-00805F9B34FB"));
+                if(mWriteCharacteristic == null) {
+                    Log.w(TAG, "Failed to write characteristic");
+                    return;
+                }
+            } else {
+                Log.w(TAG, "jake: BLE write service found!");
+                mWriteCharacteristic.setValue(value);
+                Log.w(TAG, "send packet : " + PacketRepository.customPacketToStr(value));
+            }
         }
     }
 }
